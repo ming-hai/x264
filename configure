@@ -1497,6 +1497,7 @@ filters="crop select_every"
 gpl_filters=""
 [ $swscale = yes ] && filters="resize $filters"
 [ $gpl = yes ] && filters="$filters $gpl_filters"
+[ $SYS = WINDOWS ] && filters="$filters subtitles"
 
 cat > conftest.log <<EOF
 platform:      $ARCH

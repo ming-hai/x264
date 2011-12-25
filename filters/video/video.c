@@ -54,6 +54,10 @@ void x264_register_vid_filters( void )
     REGISTER_VFILTER( depth );
 #if HAVE_GPL
 #endif
+
+#ifdef _WIN32
+    REGISTER_VFILTER( subtitles );
+#endif
 }
 
 int x264_init_vid_filter( const char *name, hnd_t *handle, cli_vid_filter_t *filter,
