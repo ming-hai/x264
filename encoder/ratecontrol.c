@@ -351,7 +351,7 @@ void x264_adaptive_quant_frame( x264_t *h, x264_frame_t *frame, float *quant_off
         float avg_adj = 0.f;
         float bias_strength = 0.f;
 
-        if( h->param.rc.i_aq_mode == X264_AQ_AUTOVARIANCE || h->param.rc.i_aq_mode == X264_AQ_AUTOVARIANCE_BIASED )
+        if( h->param.rc.i_aq_mode >= X264_AQ_AUTOVARIANCE && h->param.rc.i_aq_mode <= X264_AQ_AUTOVARIANCE_MOD )
         {
             float bit_depth_correction = 1.f / (1 << (2*(BIT_DEPTH-8)));
             float avg_adj_pow2 = 0.f;
@@ -378,7 +378,12 @@ void x264_adaptive_quant_frame( x264_t *h, x264_frame_t *frame, float *quant_off
             {
                 float qp_adj;
                 int mb_xy = mb_x + mb_y*h->mb.i_mb_stride;
-                if( h->param.rc.i_aq_mode == X264_AQ_AUTOVARIANCE_BIASED )
+                if( h->param.rc.i_aq_mode == X264_AQ_AUTOVARIANCE_MOD )
+                {
+                    qp_adj = frame->f_qp_offset[mb_xy];
+                    qp_adj = strength * (qp_adj - avg_adj) + bias_strength * (0.25f - 3.3125f / (qp_adj * qp_adj - 0.75f));
+                }
+                else if( h->param.rc.i_aq_mode == X264_AQ_AUTOVARIANCE_BIASED )
                 {
                     qp_adj = frame->f_qp_offset[mb_xy];
                     qp_adj = strength * (qp_adj - avg_adj) + bias_strength * (1.f - 14.f / (qp_adj * qp_adj));
