@@ -162,6 +162,7 @@ void x264_param_default( x264_param_t *param )
     param->p_log_private = NULL;
     param->i_log_level = X264_LOG_INFO;
     param->i_log_file_level = X264_LOG_INFO;
+    param->b_stylish = 0;
 
     /* */
     param->analyse.intra = X264_ANALYSE_I4x4 | X264_ANALYSE_I8x8;
